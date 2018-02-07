@@ -74,15 +74,15 @@ class Translator
     /**
      * Translate
      *
-     * @param string $key "category.key" or "language.category.key"
+     * @param string $key "category.key" or "locale.category.key"
      * @param array  $params
-     * @param string $language
+     * @param string $locale
      * @return string
      * @throws \InvalidArgumentException
      */
-    public function translate(string $key, array $params, string $language = null): string
+    public function translate(string $key, array $params, string $locale = null): string
     {
-        $realKey = null !== $language ? implode('.', [$language, $key]) : $key;
+        $realKey = null !== $locale ? implode('.', [$locale, $key]) : $key;
         if (! ArrayHelper::has($this->messages, $realKey)) {
             $exceptionMessage = sprintf('Translate error, key %s does not exist', $realKey);
             throw new \InvalidArgumentException($exceptionMessage);
