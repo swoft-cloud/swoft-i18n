@@ -33,6 +33,16 @@ class Translator
     private $loaded = false;
 
     /**
+     * @var string
+     */
+    private $defualtCategory = 'default';
+
+    /**
+     * @var string
+     */
+    private $defaultLanguage = 'en';
+
+    /**
      * @return void
      * @throws \RuntimeException
      */
@@ -82,16 +92,35 @@ class Translator
      */
     public function translate(string $key, array $params, string $locale = null): string
     {
-        $realKey = null !== $locale ? implode('.', [$locale, $key]) : $key;
-        if (! ArrayHelper::has($this->messages, $realKey)) {
+        $realKey = $this->getRealKey($key, $locale);
+        if (!ArrayHelper::has($this->messages, $realKey)) {
             $exceptionMessage = sprintf('Translate error, key %s does not exist', $realKey);
             throw new \InvalidArgumentException($exceptionMessage);
         }
         $message = ArrayHelper::get($this->messages, $realKey);
-        if (! \is_string($message)) {
+        if (!\is_string($message)) {
             throw new \InvalidArgumentException(sprintf('Message type error, possibly incorrectly key'));
         }
+
         return $this->formatMessage($message, $params);
+    }
+
+    /**
+     * @param string      $key
+     * @param string|null $locale
+     *
+     * @return string
+     */
+    private function getRealKey(string $key, string $locale = null): string
+    {
+        if ($locale === null) {
+            $locale = $this->defaultLanguage;
+        }
+        if (strpos($key, '.') === false) {
+            $key = implode([$this->defualtCategory, $key], '.');
+        }
+
+        return implode('.', [$locale, $key]);
     }
 
     /**
