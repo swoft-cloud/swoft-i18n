@@ -16,7 +16,7 @@ class Translator
      * Source languages
      *
      * @var string
-     * @Value(name="${config.Translator.languageDir}", env="${TRANSLATOR_LANG_DIR}")
+     * @Value(name="${config.translator.languageDir}", env="${TRANSLATOR_LANG_DIR}")
      */
     public $languageDir = '@resources/languages/';
 
@@ -33,11 +33,13 @@ class Translator
     private $loaded = false;
 
     /**
+     * @Value(name="${config.translator.defaultCategory}", env="${TRANSLATOR_DEFAULT_CATEGORY}")
      * @var string
      */
     private $defualtCategory = 'default';
 
     /**
+     * @Value(name="${config.translator.defaultLanguage}", env="${TRANSLATOR_DEFAULT_LANG}")
      * @var string
      */
     private $defaultLanguage = 'en';
