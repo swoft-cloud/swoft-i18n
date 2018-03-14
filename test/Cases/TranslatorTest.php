@@ -76,9 +76,6 @@ class TranslatorTest extends AbstractTestCase
             $translator->translate('default', [], 'zh-cn');
         }, \InvalidArgumentException::class);
 
-        $enTitle = $translator->translate('en.default.title', []);
-        $this->assertEquals('English title', $enTitle);
-
         $enBody = $translator->translate('msg.body', ['hello world', 1], 'en');
         $this->assertEquals('This is a message [hello world] 1', $enBody);
         $enBody = $translator->translate('msg.body', ['key' => 'hello world', 'int' => 1], 'en');
