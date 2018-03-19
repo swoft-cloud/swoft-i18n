@@ -8,7 +8,7 @@ if (! function_exists('translate')) {
      * @param string $language 当前语言环境
      * @return string
      */
-    function translate(string $key, array $params, string $language = null)
+    function translate(string $key, array $params = [], string $language = null)
     {
         /** @var \Swoft\I18n\Translator $translator */
         $translator = bean(\Swoft\I18n\Translator::class);
