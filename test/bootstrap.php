@@ -1,26 +1,20 @@
 <?php
+require_once dirname(__FILE__, 2) . '/vendor/autoload.php';
+require_once dirname(__FILE__, 2) . '/test/config/define.php';
 
-// vendor at component dir
-if (file_exists(dirname(__DIR__) . '/vendor/autoload.php')) {
-    require dirname(__DIR__) . '/vendor/autoload.php';
-    // application's vendor
-} elseif (file_exists(dirname(__DIR__, 3) . '/autoload.php')) {
-    /** @var \Composer\Autoload\ClassLoader $loader */
-    $loader = require dirname(__DIR__, 3) . '/autoload.php';
+// init
+\Swoft\App::$isInTest = true;
+\Swoft\Bean\BeanFactory::init();
 
-    // need load test psr4 config map
-    $componentDir  = dirname(__DIR__);
-    $componentJson = $componentDir . '/composer.json';
-    $composerData  = json_decode(file_get_contents($componentJson), true);
+/* @var \Swoft\Bootstrap\Boots\Bootable $bootstrap*/
+$bootstrap = \Swoft\App::getBean(\Swoft\Bootstrap\Bootstrap::class);
+$bootstrap->bootstrap();
 
-    foreach ($composerData['autoload-dev']['psr-4'] as $prefix => $dir) {
-        $loader->addPsr4($prefix, $componentDir . '/' . $dir);
-    }
-} else {
-    exit('Please run "composer install" to install the dependencies' . PHP_EOL);
-}
-
-\Swoole\Runtime::enableCoroutine();
-$application = new \Swoft\Test\TestApplication();
-$application->setBeanFile(__DIR__ . '/testing/bean.php');
-$application->run();
+\Swoft\Bean\BeanFactory::reload([
+    'application' => [
+        'class' => \Swoft\Testing\Application::class,
+        'inTest' => true
+    ],
+]);
+$initApplicationContext = new \Swoft\Core\InitApplicationContext();
+$initApplicationContext->init();
